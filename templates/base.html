@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+{% load staticfiles %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.11.2/css/all.css">
+    <!-- Bootstrap core CSS -->
+    <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
+    <!-- Material Design Bootstrap -->
+    <link href="{% static 'css/mdb.min.css' %}" rel="stylesheet">
+    <!-- Your custom styles (optional) -->
+    <link href="{% static 'css/style.min.css' %}" rel="stylesheet">
+    
+    <title>{% block head_title %}{% endblock %}</title>
+    {% block extra_head %}
+    {% endblock %}
+</head>
+<body>
+  
+    {% include "navbar.html" %}
+    <div class="mt-5 p-3">
+      {% if messages %}
+      <div class="w-100 mt-3">
+          {% for message in messages %}
+          <div {% if message.tags %}class="alert alert-{{ message.tags }} alert-dismissible" {% endif %}>
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong>{{ message }}</strong>
+          </div>
+          {% endfor %}
+      </div>
+      {% endif %}
+    </div>
+    {% block content  %}
+    {% endblock content %}
+
+    {% block extra_body %}
+    {% endblock %}
+
+
+    {% include "footer.html" %}
+
+    {% include "scripts.html" %}
+    {% block extra_scripts %}
+    <!-- Initializations -->
+    <script type="text/javascript">
+      // Animations initialization
+      new WOW().init();
+
+    </script>
+    {% endblock %}
+
+
+</body>
+
+</html>

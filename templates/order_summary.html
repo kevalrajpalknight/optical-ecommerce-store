@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% load staticfiles %}
+
+{% block extra_head  %}
+  <style type="text/css">
+    html,
+    body,
+    header,
+    .carousel {
+      height: 60vh;
+    }
+
+    @media (max-width: 740px) {
+
+      html,
+      body,
+      header,
+      .carousel {
+        height: 100vh;
+      }
+    }
+
+    @media (min-width: 800px) and (max-width: 850px) {
+
+      html,
+      body,
+      header,
+      .carousel {
+        height: 100vh;
+      }
+    }
+
+  </style>
+{% endblock %}
+{% block title  %}Home{% endblock %}
+
+
+
+{% block content %}
+
+  <!--Main layout-->
+  <main>
+    <div class="container">
+
+        <div class="table-responsive text-nowrap">
+
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Title</th>
+                  <th scope="col">Price</th>
+                  <th scope="col">Quantity</th>
+                  <th scope="col">Total Price</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for order_item in cart.items.all %}
+                <tr>
+                  <th scope="row"></th>
+                  <td>{{ order_item.item.title }}<br>
+                      {% if order_item.lenses_required %}
+                        {{order_item.lenses.power_type}} - {{order_item.lenses.lenses_type}}
+                      {% else %}
+                        Not Require Lenses? <a href = "{% url 'core:add_lenses' order_item.item.slug %}"><i class="fas fa-edit"></i></a>
+                      {% endif %}
+                  </td>
+                  <td>₹{{ order_item.item.price }}</td>
+                  <td>
+                    <a  href = "{% url 'core:remove_single_item_from_cart' order_item.item.slug %}" class="ml-3"><i class="fas fa-minus"></i></a>
+                      {{ order_item.quantity }}
+                    <a href = "{% url 'core:add_to_cart' order_item.item.slug %}" class="mr-3"><i class="fas fa-plus"></i></a>
+                  </td>
+                  <td>
+                    {% if order_item.get_total_discount_item_price %}
+                      ₹{{ order_item.get_total_discount_item_price }}
+                      <span class="badge badge-primary">Saving ₹{{ order_item.get_amount_saved }}</span>
+                    {% else %}
+                      ₹{{ order_item.get_total_item_price }}
+                    {% endif %}
+                    <a href="{% url 'core:remove_from_cart' order_item.item.slug %}" class="float-right text-danger"><i class="fas fa-trash"></i></a>
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="5" class="text-center"><b>Your Cart is Empty ¯\_(ツ)_/¯</b></td>
+                </tr>
+                {% endfor %}
+                {% if cart.get_total_bill_amount %}
+                <tr>
+                  <td  colspan="4"><b>Total Cost</b></td>
+                  <td><b>₹{{cart.get_total_bill_amount}}</b></td>
+                </tr>
+
+                {% endif %}
+              </tbody>
+            </table>
+
+            <div class="float-right">
+              <a class="btn btn-info" href="{% url 'core:home' %}">Back to shopping</a>
+              <a  class="btn btn-primary" href="{% url 'core:checkout' %}">Proceed to checkout</a>
+            </div>
+        </div>
+
+    </div>
+  </main>
+  <!--Main layout-->
+{% endblock %}

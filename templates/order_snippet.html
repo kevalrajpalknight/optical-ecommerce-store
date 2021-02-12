@@ -1,0 +1,71 @@
+<!--Grid column-->
+<div class="col-md-12 mb-4">
+
+    <!-- Heading -->
+    <h4 class="d-flex justify-content-between align-items-center mb-3">
+        <span class="text-muted">Your cart</span>
+        <span class="badge badge-secondary badge-pill">{{ cart.items.count }}</span>
+    </h4>
+
+    <!-- Cart -->
+    <ul class="list-group mb-3 z-depth-1">
+        {% for order_item in cart.items.all %}
+        <li class="list-group-item d-flex justify-content-between lh-condensed">
+        <div>
+            <h6 class="my-0">{{ order_item.item.title }}</h6>
+            <small class="text-muted">
+            {% if order_item.item.discount_price %}
+                    {{order_item.item.discount_price}} x {{order_item.quantity}}
+            {% else %}
+                {{order_item.item.price}} x {{order_item.quantity}}
+            {% endif %}
+            </small>
+        </div>
+        <span class="text-muted">
+            
+            {% if order_item.get_total_discount_item_price %}
+            ₹{{ order_item.get_total_discount_item_price }}
+            {% else %}
+            ₹{{ order_item.get_total_item_price }}
+            {% endif %}
+
+        </span>
+        </li>
+        {% endfor %}
+        {% if cart.coupon %}
+        <li class="list-group-item d-flex justify-content-between bg-light">
+        <div class="text-success">
+            <h6 class="my-0">Promo code</h6>
+            <small>{{cart.coupon.code}}</small>
+        </div>
+        <span class="text-success">-{{cart.coupon.percentage}}%</span>
+        </li>
+         {% endif %}
+        <li class="list-group-item d-flex justify-content-between">
+        <span>Total (INR)</span>
+        <strong>₹{{cart.get_total_bill_amount_with_discount}}</strong>
+        </li>
+    </ul>
+    <!-- Cart -->
+   
+    {% if DISPLAY_COUPON_FORM %}
+    <!-- Promo code -->
+    <form class="card p-2" method="POST" action="{% url 'core:add_coupon' %}">
+        {% csrf_token %}
+        <div class="input-group">
+        {{ couponform.code }}
+        <div class="input-group-append">
+            <button class="btn btn-secondary btn-md waves-effect m-0" type="submit">Redeem</button>
+        </div>
+        </div>
+    </form>
+    <!-- Promo code -->
+    {% endif %}
+    
+</div>
+<!--Grid column-->
+<!--Card-->
+<div class="center">
+    {{ form.render }}
+</div>
+<!--/.Card-->

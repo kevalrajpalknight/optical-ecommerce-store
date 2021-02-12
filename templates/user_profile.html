@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% block head_title %} {{user_profile.user.first_name}} {{user_profile.user.last_name}} {% endblock %}
+
+{% block extra_head %}
+<style>
+.testimonial-card img{
+    height: 100%;
+    width: 100%;
+}
+.testimonial-card .avatar {
+    width: 120px;
+    margin-top: -60px;
+    overflow: hidden;
+    border: 5px solid #fff;
+    border-radius: 50%;
+}
+
+.testimonial-card .card-up {
+    height: 120px;
+    overflow: hidden;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+}
+.aqua-gradient {
+    background: linear-gradient(40deg,#2096ff,#05ffa3) !important;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+  <!--Main layout-->
+  <main>
+    <div class="container">
+        <!--Grid column-->
+        <center>
+        <div class="col-lg-4 col-md-4 col-xl-4 col-sm-6 col-xs-6 m-5">
+
+           <!-- Card -->
+            <div class="card testimonial-card color-block">
+
+            <!-- Background color -->
+            <div class="card-up aqua-gradient lighten-1" ></div>
+
+            <!-- Avatar -->
+            <div class="avatar mx-auto white">
+                <img src="{{ user_profile.profile_image.url }}" class="rounded-circle"
+                alt="{{ user_profile.user.username }}">
+            </div>
+
+            <!-- Content -->
+            <div class="card-body">
+                <!-- Name -->
+                <h4 class="card-title">{{user_profile.user.first_name}} {{user_profile.user.last_name}}</h4>
+                <hr>
+                <!-- Quotation -->
+                <p><i class="fas fa-at"></i>&nbsp;{{user_profile.user.email}}</p>
+                <p><i class="fas fa-mobile"></i>&nbsp;{{user_profile.phone}}</p>
+            </div>
+
+            </div>
+            <!-- Card -->
+
+        </div>
+        </center>
+        <!--Grid column-->
+    </div>
+  </main>  
+
+    <!--Main layout-->
+  <main>
+    <div class="container">
+
+        <div class="table-responsive text-nowrap">
+
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">#</th>
+                  <th scope="col">Orders</th>
+                  <th scope="col">Billing Amount</th>
+                  <th scope="col">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for order in orders %}
+                <tr>
+                  <th scope="row">{{ forloop.counter }}</th>
+                  <td>{% for order_item in order.items.all %}{{ order_item.item.title }} X {{ order_item.quantity }}<br>{% endfor %}</td>
+                  <td>₹{{ order.get_total_bill_amount }}</td>
+                  <td>
+                      {% if order.refund_granted %}
+                        <p class="text-danger"><strong>refund_granted</strong></p>
+                      {% elif order.refund_request %}
+                        <p class="text-warning"><strong>refund_request<strong></p>
+                      {% elif order.received %}
+                        <p class="text-success"><strong>received</strong></p>
+                      {% elif order.delivered %}
+                        <p class="text-primary"><strong>Out for Delivery</strong></p>
+                      {% elif order.in_process_delivery %}
+                        <p class="text-primary"><strong>Under Process</strong></p>
+                      {% elif order.failed_confirm %}
+                        <p class="text-primary"><strong>{{ order.remark_for_failure }}</strong></p>
+                      {% else %}
+                        <p class="text-primary"><strong>Ordered</strong></p>
+                      {% endif %}
+                  </td>
+                </tr>
+                {% empty %}
+                <tr>
+                  <td colspan="5" class="text-center"><b>You Don't Have any orders ¯\_(ツ)_/¯</b></td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+        </div>
+
+    </div>
+  </main>
+  <!--Main layout-->
+{% endblock %}

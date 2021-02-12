@@ -1,0 +1,145 @@
+{% extends "base.html" %}
+{% load cart_template_tags %}
+
+{% load staticfiles %}
+
+{% block head_title  %}Checkout{% endblock %}
+{% block content %}
+  <!--Main layout-->
+  <main>
+    <div class="container wow fadeIn">
+
+      <!-- Heading -->
+      <h2 class="my-5 h2 text-center">Checkout form</h2>
+
+
+      <!--Grid row-->
+      <div class="row">
+
+        <!--Grid column-->
+        <div class="col-md-8 mb-4">
+
+          <!--Card-->
+          <div class="card">
+
+            <!--Card content-->
+            <form method="POST" name="checkout" class="card-body" onsubmit="return validateForm()" enctype="multipart/form-data">
+              {% csrf_token %}
+
+              <h3>Shipping Address</h3>
+              <div class="hideable_shipping_form">
+                  <!--address-->
+                  <div class="md-form mb-5">
+                    <input type='text' placeholder='1234 Main St' id='shipping_street_address' name='shipping_street_address' class='form-control' />
+                    <label for="shipping_street_address" class="">Street Address</label>
+                  </div>
+
+                  <!--address-2-->
+                  <div class="md-form mb-5">
+                    <input type='text' placeholder='Apartment or suite' id='shipping_apartment_address' name='shipping_apartment_address' class='form-control' />
+                    <label for="shipping_apartment_address" class="">Address 2 (optional)</label>
+                  </div>
+
+                  <!--Grid row-->
+                  <div class="row">
+
+                    <!-- Zip Code -->
+                    <div class="col-lg-4 col-md-6 mb-4">
+
+                      <label for="shipping_zip_code">Zip</label>
+                      <input type='text' placeholder='Zip code' id='shipping_zip_code' name='shipping_zip_code' class='form-control' />
+                      <div class="invalid-feedback">
+                        Zip code required.
+                      </div>
+
+                    </div>
+                    <!--Grid column-->
+
+                  </div>
+                  <!--Grid row-->
+
+                  <div class="col-lg-12 col-md-6 mb-4">
+
+                    <p>Note: We currently delivery only in Gwalior, Madhya Pradesh</p>
+
+                  </div>
+                  <hr>
+                  
+                  <!-- Save Information -->
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" name="set_default_shipping" id="set_default_shipping">
+                    <label class="custom-control-label" for="set_default_shipping">Save as default shipping address</label>
+                  </div>
+
+
+              </div>
+              {% if default_shipping_address %}
+                  <!-- Use Default Information -->
+                  <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input"  name="use_default_shipping"  id="use_default_shipping">
+                    <label class="custom-control-label" for="use_default_shipping">Use default shipping address : {{default_shipping_address.street_address|truncatechars:25}}</label>
+                  </div>
+              {% endif %}
+              <hr>
+              
+              <!-- Payment Method -->
+              <div class="d-block my-3">
+                {% for value, name in form.fields.payment_method.choices %}
+                <div class="custom-control custom-radio">
+                  <input id="{{ name }}" name="payment_method" value="{{ value }}" type="radio" class="custom-control-input" required>
+                  <label class="custom-control-label" for="{{ name }}">{{ name }}</label>
+                </div>
+                {% endfor %}
+              </div>
+              <hr class="mb-4">
+              <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button>
+
+            </form>
+
+          </div>
+          <!--/.Card-->
+
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-md-4 mb-4">
+          {% include "order_snippet.html" %}
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+    </div>
+  </main>
+  <!--Main layout-->
+{% endblock %}
+
+{% block extra_scripts %}
+<script type="text/javascript">
+
+function validateForm() {
+  var zip_code = document.forms["checkout"]["shipping_zip_code"].value;
+  if (zip_code == "") {
+    window.alert("Name must be filled out");
+    zip_code.focus();
+    return false;
+  }
+}
+
+  var hideable_shipping_form = $('.hideable_shipping_form');
+
+  var use_default_shipping = document.querySelector("input[name=use_default_shipping]");
+  var same_billing_address = document.querySelector("input[name=same_billing_address]");
+
+  use_default_shipping.addEventListener('change', function (){
+    if(this.checked){
+      hideable_shipping_form.hide();
+    }
+    else{
+      hideable_shipping_form.show();
+    }
+  });
+
+</script>
+{% endblock %}

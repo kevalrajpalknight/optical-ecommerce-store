@@ -31,7 +31,7 @@ This project includes:
 <img src="ui_images\\cart_summary.jpeg" alt="Car Summary Page">
 
 4. Lenses Requirements page
-<img src="ui_images\\lens_requirements.jpeg" alt="Filling Lens Requirements Page">
+<img src="ui_images\\lens_requirement.jpeg" alt="Filling Lens Requirements Page">
 
 5. Checkout page
 <img src="ui_images\\checkout.jpeg" alt="Checkout Page">

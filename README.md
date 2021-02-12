@@ -23,11 +23,15 @@ This project includes:
 
 1. Front page
 <img src="ui_images\\frontpage.jpeg" alt="Front Page">
-1. Product Detail page
+
+2. Product Detail page
 <img src="ui_images\\detailview.jpeg" alt="Product Detail Page">
-1. Front page
+
+3. Cart Summary page
 <img src="ui_images\\cart_summary.jpeg" alt="Car Summary Page">
-1. Front page
+
+4. Lenses Requirements page
 <img src="ui_images\\lens_requirements.jpeg" alt="Filling Lens Requirements Page">
-1. Front page
+
+5. Checkout page
 <img src="ui_images\\checkout.jpeg" alt="Checkout Page">
